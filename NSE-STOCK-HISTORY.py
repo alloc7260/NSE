@@ -50,7 +50,7 @@ def fetch_url(url, cookies):
     else:
         raise ValueError("Please try again in a minute.")
 
-def scrape_data(start_date, end_date, input_type='stock', name=None):
+def scrape_data(start_date, end_date, name=None, input_type='stock'):
     """
     Called by stocks and indices to scrape data.
     Create threads for different requests, parses data, combines them and returns dataframe
