@@ -10,6 +10,8 @@ import urllib
 import pandas as pd
 import concurrent
 from concurrent.futures import ALL_COMPLETED
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 """### Set Environment Variables """
 
@@ -38,12 +40,12 @@ def fetch_cookies():
         raise ValueError("Please try again in a minute.")
     return response.cookies.get_dict()
 
-def fetch_url(url, cookies):
+def fetch_url(session, url, cookies):
     """
         This is the function call made by each thread. A get request is made for given start and end date, response is
         parsed and dataframe is returned
     """
-    response = requests.get(url, timeout=30, headers=get_adjusted_headers(), cookies=cookies)
+    response = session.get(url, timeout=30, headers=get_adjusted_headers(), cookies=cookies)
     if response.status_code == requests.codes.ok:
         json_response = json.loads(response.content)
         return pd.DataFrame.from_dict(json_response['data'])
@@ -63,6 +65,12 @@ def scrape_data(start_date, end_date, name=None, input_type='stock'):
         Pandas DataFrame: df containing data for stocksymbol for provided date range
     """
     cookies = fetch_cookies()
+    
+    # Requests session
+    retries = Retry(total=10, backoff_factor=2)
+    adapter = HTTPAdapter(max_retries=retries)
+    session = requests.Session()
+    session.mount('https://', adapter)
 
     start_date = datetime.datetime.strptime(start_date, "%d-%m-%Y")
     end_date = datetime.datetime.strptime(end_date, "%d-%m-%Y")
@@ -105,10 +113,15 @@ def scrape_data(start_date, end_date, name=None, input_type='stock'):
             except Exception as exc:
                 # logging.error('%r generated an exception: %s. Please try again later.' % (url, exc))
                 raise exc
+    session.close()
     return format_dataframe_result(result)
 
 
 def format_dataframe_result(result):
+    if not len(result):
+        print("No price data found for the selected conditions")
+        return None
+    
     columns_required = ["CH_TIMESTAMP", "CH_SYMBOL", "CH_SERIES", "CH_TRADE_HIGH_PRICE",
                         "CH_TRADE_LOW_PRICE", "CH_OPENING_PRICE", "CH_CLOSING_PRICE", "CH_LAST_TRADED_PRICE",
                         "CH_PREVIOUS_CLS_PRICE", "CH_TOT_TRADED_QTY", "CH_TOT_TRADED_VAL", "CH_52WEEK_HIGH_PRICE",
