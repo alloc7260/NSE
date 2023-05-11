@@ -103,7 +103,7 @@ def scrape_data(start_date, end_date, name=None, input_type='stock'):
 
     result = pd.DataFrame()
     with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
-        future_to_url = {executor.submit(fetch_url, url, cookies): url for url in url_list}
+        future_to_url = {executor.submit(fetch_url, session, url, cookies): url for url in url_list}
         concurrent.futures.wait(future_to_url, return_when=ALL_COMPLETED)
         for future in concurrent.futures.as_completed(future_to_url):
             url = future_to_url[future]
