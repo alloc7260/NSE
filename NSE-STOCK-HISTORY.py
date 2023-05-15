@@ -105,10 +105,12 @@ def scrape_data(start_date, end_date, name=None, input_type='stock'):
             except Exception as exc:
                 # logging.error('%r generated an exception: %s. Please try again later.' % (url, exc))
                 raise exc
-    return format_dataframe_result(result)
+    return format_dataframe_result(result, start_date, end_date)
 
 
-def format_dataframe_result(result):
+def format_dataframe_result(result, start_date, end_date):
+    if result.empty:
+        return f"No Data Found : for date range {start_date} to {end_date}"
     columns_required = ["CH_TIMESTAMP", "CH_SYMBOL", "CH_SERIES", "CH_TRADE_HIGH_PRICE",
                         "CH_TRADE_LOW_PRICE", "CH_OPENING_PRICE", "CH_CLOSING_PRICE", "CH_LAST_TRADED_PRICE",
                         "CH_PREVIOUS_CLS_PRICE", "CH_TOT_TRADED_QTY", "CH_TOT_TRADED_VAL", "CH_52WEEK_HIGH_PRICE",
@@ -125,5 +127,5 @@ def format_dataframe_result(result):
 
 """### Scrape Directly to DataFrame """
 
-df = scrape_data('01-01-2000','02-02-2023','MRF')
+df = scrape_data('15-01-2000','16-01-2000','MRF')
 print(df)
