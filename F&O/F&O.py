@@ -5,8 +5,6 @@ import requests
 import datetime
 import json
 import pandas as pd
-from concurrent.futures import ALL_COMPLETED
-from six.moves.urllib.parse import urlparse
 import re
 
 """# Define Helper Functions
@@ -117,7 +115,7 @@ def build_dt_dict():
                     add_dt(vix_exp, dt)
 
 
-def try_to_get_expiry_date(year, month, index=True, stock=False, vix=False):
+def get_expiry_date(year, month, index=True, stock=False, vix=False):
     try:
         if vix and vix_exp:
             return vix_exp[year][month]
@@ -133,21 +131,10 @@ def try_to_get_expiry_date(year, month, index=True, stock=False, vix=False):
             name = 'stock derivatives'
         else:
             name = 'vix derivatives'
-        raise ExpiryDateError(
-            'No expiry date found in the month of {}-{} for {}'.format(year, month, name))
+        # print(f'No expiry date found for {name}, year {year}, month {month}')
 
 
-def get_expiry_date(year, month, index=True, stock=False, vix=False, recursion=0):
-    try:
-        return try_to_get_expiry_date(year, month, index, stock, vix)
-    except:
-        if recursion > 1:
-            raise
-        else:
-            pass
-    #print("building dictionary")
-    build_dt_dict()
-    return get_expiry_date(year, month, index, stock, vix, recursion=recursion+1)
+build_dt_dict()
 
 """# Stock Futures"""
 
