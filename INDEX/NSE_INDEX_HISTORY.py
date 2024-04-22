@@ -20,7 +20,7 @@ def get_adjusted_headers():
     "Content-Type": "application/json; charset=UTF-8",
     "Origin": "https://www.niftyindices.com",
     "Referer": "https://www.niftyindices.com/reports/historical-data",
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36"
+    "User-Agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Mobile Safari/537.36"
 }
 
 def fetch_cookies():
@@ -43,7 +43,7 @@ def scrape_data(start_date, end_date, name, input_type='index'):
     Returns:
         Pandas DataFrame: df containing data for stocksymbol for provided date range
     """
-    cookies = fetch_cookies()
+    # cookies = fetch_cookies()
 
     start_date = datetime.datetime.strptime(start_date, "%d-%m-%Y")
     end_date = datetime.datetime.strptime(end_date, "%d-%m-%Y")
@@ -54,8 +54,8 @@ def scrape_data(start_date, end_date, name, input_type='index'):
         'endDate' : end_date.strftime('%d-%b-%Y')
     }
 
-    payload = str(pld)
-    response = requests.request("POST", HISTORICAL_DATA_URL, data=payload, timeout=30, headers=get_adjusted_headers(), cookies=cookies)
+    payload = {"cinfo": str(pld)}
+    response = requests.request("POST", HISTORICAL_DATA_URL, json=payload, timeout=30, headers=get_adjusted_headers())
     if response.status_code == requests.codes.ok:
         return pd.DataFrame(eval(json.loads(response.text)['d']))
 
