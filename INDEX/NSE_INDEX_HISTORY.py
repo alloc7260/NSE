@@ -51,7 +51,8 @@ def scrape_data(start_date, end_date, name, input_type='index'):
     pld = {
         'name' : name,
         'startDate' : start_date.strftime('%d-%b-%Y'),
-        'endDate' : end_date.strftime('%d-%b-%Y')
+        'endDate' : end_date.strftime('%d-%b-%Y'),
+        'indexName' : name
     }
 
     payload = {"cinfo": str(pld)}
