@@ -10,6 +10,10 @@ import json
 
 def get_headers():
     return {
+        "priority": "u=0, i",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36",
+    }
+    return {
         "Host": "www.nseindia.com",
         "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:85.0) Gecko/20100101 Firefox/85.0",
         "Accept": "*/*",

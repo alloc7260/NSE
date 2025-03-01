@@ -19,6 +19,10 @@ BASE_URL = 'https://www.nseindia.com/'
 
 def get_adjusted_headers():
     return {
+        "priority": "u=0, i",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36",
+    }
+    return {
         'Host': 'www.nseindia.com',
         'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:85.0) Gecko/20100101 Firefox/85.0',
         'Accept': '*/*',
@@ -126,5 +130,5 @@ def format_dataframe_result(result, start_date, end_date):
 
 """### Scrape Directly to DataFrame """
 
-df = scrape_data('15-01-2000','16-01-2000','MRF')
+df = scrape_data('15-01-2000','16-01-2001','MRF')
 print(df)

@@ -16,12 +16,11 @@ HISTORICAL_DATA_URL = "https://www.niftyindices.com/Backpage.aspx/getHistoricald
 
 def get_adjusted_headers():
     return {
-    "Accept": "application/json, text/javascript, */*; q=0.01",
-    "Content-Type": "application/json; charset=UTF-8",
-    "Origin": "https://www.niftyindices.com",
-    "Referer": "https://www.niftyindices.com/reports/historical-data",
-    "User-Agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Mobile Safari/537.36"
-}
+        "Content-Type": "application/json; charset=UTF-8",
+        "Origin": "https://www.niftyindices.com",
+        "Referer": "https://www.niftyindices.com/reports/historical-data",
+        "User-Agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Mobile Safari/537.36"
+    }
 
 def fetch_cookies():
     response = requests.get(BASE_URL, timeout=30, headers=get_adjusted_headers())
@@ -62,4 +61,4 @@ def scrape_data(start_date, end_date, name, input_type='index'):
 
 """### Scrape Directly to DataFrame """
 
-scrape_data('01-01-2000','20-05-2023','NIFTY 50')
+print(scrape_data('01-01-2023','20-05-2023','NIFTY 50'))
